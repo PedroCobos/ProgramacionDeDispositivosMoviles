@@ -1,0 +1,92 @@
+import 'dart:html';
+
+class Rosco {
+  List<Pregunta> roscoPreguntas = [];
+
+  Rosco() {
+    roscoPreguntas.addAll(RoscoApi().obtenerRoscos());
+  }
+  Pregunta obtenerPregunta() {
+    return roscoPreguntas[0];
+  }
+
+  Pregunta pasaPalabra() {
+    return Pregunta("", "", "");
+  }
+
+  String evaluarRespuesta(String letra, String respuesta) {
+    var esCorrecta = roscoPreguntas.any((rosco) =>
+        rosco.letra == letra &&
+//por medio de == verifica si existe la misma letra, si existe la guardara el resultado en la variable esCorrecta
+        rosco.respuesta == respuesta);
+//por medio de la sentencia if se validara si la respuesta es verdadera o falso
+    if (esCorrecta == true) {
+      return 'letra $letra Respuesta Correcta'; //retornando si es correcta
+    }
+
+    return 'letra $letra Respuesta Incorrecta'; //retornando si es Incorrecta
+  }
+}
+
+class Pregunta {
+  String letra;
+  String definicion;
+  String respuesta;
+
+  Pregunta(this.letra, this.definicion, this.respuesta);
+}
+
+//creando clase Db
+class Db {
+  static List letras = const ['A', 'B', 'C', 'D', 'E', 'F'];
+  static List definiciones = const [
+    'Persona que tripula una nave espacial?',
+    'Saco de tela que sirve para guardar o llevar algo?',
+    'Aparato destinado a registrar imagenes animadas para el cine o la television?',
+    'Obra literaria escrita para ser representada',
+    'Que se prolonga muchisimo o exesivamente',
+    'Laboratorio y despacho farmaceutico'
+  ];
+
+  static List respuestas = [
+    'Astronauta',
+    'Bolsa',
+    'Camara',
+    'Drama',
+    'Eterbo',
+    'Farmacia'
+  ];
+}
+
+//Creacion de la clase Apy
+class RoscoApi {
+  List<Pregunta> roscoPreguntas = [];
+
+  List<Pregunta> obtenerRoscos() {
+    for (var letra in Db.letras) {
+      var index = Db.letras.indexOf(letra);
+      var roscoPregunta =
+          Pregunta(letra, Db.definiciones[index], Db.respuestas[index]);
+      roscoPreguntas.add(roscoPregunta);
+    }
+    return roscoPreguntas;
+  }
+}
+
+void main() {
+  var rosco = Rosco();
+  var primeraDefinicion = rosco.obtenerPregunta();
+
+  querySelector('#pregunta').text = primeraDefinicion.definicion;
+  querySelector('#letra').text = primeraDefinicion.letra;
+
+  //funcion para capturar evento Onclick de un boton
+  querySelector('#btnEnviar').onClick.listen((event) {
+    var respuesta = (querySelector('#textRespuesta') as InputElement).value;
+    var letra = querySelector('#letra').text;
+
+    //Llamado de elemento evaluar respuesta
+    String mensaje = rosco.evaluarRespuesta(letra, respuesta);
+    print(mensaje);
+  });
+}

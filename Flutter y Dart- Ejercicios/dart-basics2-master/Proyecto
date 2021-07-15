@@ -1,0 +1,27 @@
+void main() {
+  
+}
+class Rosco{
+  List<Pregunta> roscoPreguntas;
+
+  Pregunta obtenerPregunta(){
+   return Pregunta("","","");
+
+  }
+ Pregunta siguientePregunta(){
+   return Pregunta("","","");
+ }
+  
+  String evaRespuesta(){
+   return"next";
+  }
+}
+class Pregunta{
+ String letra;
+ String definicion;
+ String respuesta;
+  
+  Pregunta(this.letra, this.definicion, this.respuesta)
+
+  
+}
